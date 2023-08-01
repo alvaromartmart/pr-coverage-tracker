@@ -38,10 +38,16 @@ function compareCoverageData(
   prev: CoverageData,
   cur: CoverageData
 ): CoverageData {
-  const Statements = prev?.Statements ? cur.Statements - prev.Statements : 0
-  const Branches = prev?.Branches ? cur.Branches - prev.Branches : 0
-  const Functions = prev?.Functions ? cur.Functions - prev.Functions : 0
-  const Lines = prev?.Lines ? cur.Lines - prev.Lines : 0
+  const Statements = Number(
+    (prev?.Statements ? cur.Statements - prev.Statements : 0)?.toFixed(2)
+  )
+  const Branches = Number(
+    (prev?.Branches ? cur.Branches - prev.Branches : 0)?.toFixed(2)
+  )
+  const Functions = Number(
+    (prev?.Functions ? cur.Functions - prev.Functions : 0)?.toFixed(2)
+  )
+  const Lines = Number((prev?.Lines ? cur.Lines - prev.Lines : 0)?.toFixed(2))
   return {
     Statements,
     Branches,
