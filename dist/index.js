@@ -3193,10 +3193,11 @@ function readCoverage(filePath) {
     }
 }
 function compareCoverageData(prev, cur) {
-    const Statements = (prev === null || prev === void 0 ? void 0 : prev.Statements) ? cur.Statements - prev.Statements : 0;
-    const Branches = (prev === null || prev === void 0 ? void 0 : prev.Branches) ? cur.Branches - prev.Branches : 0;
-    const Functions = (prev === null || prev === void 0 ? void 0 : prev.Functions) ? cur.Functions - prev.Functions : 0;
-    const Lines = (prev === null || prev === void 0 ? void 0 : prev.Lines) ? cur.Lines - prev.Lines : 0;
+    var _a, _b, _c, _d;
+    const Statements = Number((_a = ((prev === null || prev === void 0 ? void 0 : prev.Statements) ? cur.Statements - prev.Statements : 0)) === null || _a === void 0 ? void 0 : _a.toFixed(2));
+    const Branches = Number((_b = ((prev === null || prev === void 0 ? void 0 : prev.Branches) ? cur.Branches - prev.Branches : 0)) === null || _b === void 0 ? void 0 : _b.toFixed(2));
+    const Functions = Number((_c = ((prev === null || prev === void 0 ? void 0 : prev.Functions) ? cur.Functions - prev.Functions : 0)) === null || _c === void 0 ? void 0 : _c.toFixed(2));
+    const Lines = Number((_d = ((prev === null || prev === void 0 ? void 0 : prev.Lines) ? cur.Lines - prev.Lines : 0)) === null || _d === void 0 ? void 0 : _d.toFixed(2));
     return {
         Statements,
         Branches,
