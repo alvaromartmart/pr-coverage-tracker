@@ -1,0 +1,51 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3.7.0
+        with:
+          node-version: 16.x
+      - run: |
+          npm ci
+      - run: |
+          npm run all
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        id: 'coverage'
+        with:
+          coverage-path: '__tests__/text-summary.txt'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          echo "Hello world"
+          echo "${{ steps.coverage.outputs.comment }}"
+          echo "${{ steps.coverage.outputs.comment-file }}"
+      # Create/update comment on Pull Request
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: github.event_name == 'pull_request'
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: Coverage trend
+          comment-author: 'github-actions[bot]'
+      - name: Create or Update Comment
+        uses: peter-evans/create-or-update-comment@v3.0.1
+        if: github.event_name == 'pull_request'
+        with:
+          issue-number: ${{ github.event.number }}
+          body-path: ${{ steps.coverage.outputs.comment-file }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace

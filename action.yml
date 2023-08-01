@@ -1,0 +1,22 @@
+name: 'PR test coverage trends'
+description: 'Provide a description here'
+author: 'alvaromartmart'
+inputs:
+  token:
+    required: true
+    description: 'Github token'
+  coverage-path:
+    required: true
+    description: 'Path to text-summary.txt coverage file'
+  reference-coverage-path:
+    description: 'Path to previous text-summary.txt coverage file to compare with'
+    default: '__prev-text-summary.txt'
+
+outputs:
+  comment:
+    description: 'Coverage summary'
+  comment-file:
+    description: 'Path to markdown file with the coverage summary'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
