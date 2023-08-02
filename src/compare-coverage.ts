@@ -128,6 +128,12 @@ export function getCoverageComment({
         ])
   ].join('\n')
 
+  core.setOutput('compared', trends !== null)
+  core.setOutput(
+    'has-changed',
+    trends?.Branches || trends?.Functions || trends?.Lines || trends?.Statements
+  )
+
   core.debug(message)
   return message
 }

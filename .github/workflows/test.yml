@@ -43,7 +43,7 @@ jobs:
           comment-author: 'github-actions[bot]'
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v3.0.2
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.coverage.outputs.compared == 'true' && steps.coverage.outputs.has-changed == 'true'
         with:
           issue-number: ${{ github.event.number }}
           body-path: ${{ steps.coverage.outputs.comment-file }}

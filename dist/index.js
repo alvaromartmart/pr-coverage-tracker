@@ -3246,6 +3246,8 @@ function getCoverageComment({ commitId, currentCoverageFile, previousCommitId, p
                 `| Lines | ? | ${currentCov.Lines}% | ? |\n`
             ])
     ].join('\n');
+    core.setOutput('compared', trends !== null);
+    core.setOutput('has-changed', (trends === null || trends === void 0 ? void 0 : trends.Branches) || (trends === null || trends === void 0 ? void 0 : trends.Functions) || (trends === null || trends === void 0 ? void 0 : trends.Lines) || (trends === null || trends === void 0 ? void 0 : trends.Statements));
     core.debug(message);
     return message;
 }

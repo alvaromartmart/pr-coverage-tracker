@@ -17,6 +17,10 @@ outputs:
     description: 'Coverage summary'
   comment-file:
     description: 'Path to markdown file with the coverage summary'
+  compared:
+    description: 'Returns true if the action was able to compare coverage with the base branch'
+  has-changed:
+    description: 'Returns true if a comparison with base branch was performed and there are changes in coverage'
 runs:
   using: 'node16'
   main: 'dist/index.js'
