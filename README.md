@@ -56,7 +56,9 @@ Example: adding a comment to the PR with the summary
         id: coverage
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Find Comment
+      - name: Write comment
+        # Do it only if there were changes in coverage
+        if: (steps.coverage.outputs.compared == 'true') && (steps.coverage.outputs.has-changed == 'true')
         uses: peter-evans/create-or-update-comment@v3.0.1
         if: github.event_name == 'pull_request'
         with:
