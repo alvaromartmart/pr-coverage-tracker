@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
 import * as cache from '@actions/cache'
 import {getCoverageComment} from './compare-coverage'
-import {mv} from '@actions/io'
+import {cp} from '@actions/io'
 import * as fs from 'fs'
 
 async function run(): Promise<void> {
@@ -73,7 +73,7 @@ async function run(): Promise<void> {
     fs.writeFileSync('comment.md', comment)
 
     // Cache coverage as reference
-    await mv(currentCoverageFile, previousCoverageFile, {force: true})
+    await cp(currentCoverageFile, previousCoverageFile, {force: true})
     await cache.saveCache(
       [previousCoverageFile],
       `${process.platform}-${branchName}-prev-${context.sha}`

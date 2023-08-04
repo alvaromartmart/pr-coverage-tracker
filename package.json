@@ -1,6 +1,6 @@
 {
   "name": "pr-coverage-tracker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Action that compares test coverage between PR head branch and base",
   "main": "lib/main.js",

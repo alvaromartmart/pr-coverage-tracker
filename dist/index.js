@@ -3349,7 +3349,7 @@ function run() {
             core.info(comment);
             fs.writeFileSync('comment.md', comment);
             // Cache coverage as reference
-            yield (0, io_1.mv)(currentCoverageFile, previousCoverageFile, { force: true });
+            yield (0, io_1.cp)(currentCoverageFile, previousCoverageFile, { force: true });
             yield cache.saveCache([previousCoverageFile], `${process.platform}-${branchName}-prev-${github_1.context.sha}`);
             core.setOutput('comment-file', 'comment.md');
             core.setOutput('comment', comment);
