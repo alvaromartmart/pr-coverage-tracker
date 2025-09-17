@@ -42,7 +42,7 @@ jobs:
           body-includes: Coverage trend
           comment-author: 'github-actions[bot]'
       - name: Create or Update Comment
-        uses: peter-evans/create-or-update-comment@v3.1.0
+        uses: peter-evans/create-or-update-comment@v4.0.0
         if: github.event_name == 'pull_request' && steps.coverage.outputs.compared == 'true' && steps.coverage.outputs.has-changed == 'true'
         with:
           issue-number: ${{ github.event.number }}
