@@ -83,6 +83,10 @@ async function run(): Promise<void> {
     }
 
     const token = core.getInput('token', {required: true})
+    const mode = core.getInput('mode') || 'compare'
+    if (mode !== 'check' && mode !== 'compare') {
+      core.warning(`Unrecognized mode '${mode}', defaulting to 'compare'`)
+    }
 
     const octokit = getOctokit(token)
 
@@ -110,6 +114,15 @@ async function run(): Promise<void> {
       previousCoverageFile
     )
     sha = restoredSha
+
+    const cacheHit = restoredSha !== undefined
+    core.setOutput('cache-hit', cacheHit)
+    core.info(`Cache probe result: cache-hit=${cacheHit}`)
+
+    if (mode === 'check') {
+      core.info('Check mode: exiting after cache probe')
+      return
+    }
 
     // For non-PR events, if cache not found, fallback to previous commit via API
     if (context.eventName !== 'pull_request' && !sha) {
