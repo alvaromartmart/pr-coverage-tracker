@@ -1,6 +1,6 @@
 import fs from 'fs'
 import * as core from '@actions/core'
-
+import {context} from '@actions/github'
 import {exit} from 'process'
 
 type CoverageData = {
@@ -30,6 +30,7 @@ function readCoverage(filePath: string): CoverageData | null {
       Lines
     }
   } catch (err) {
+    core.debug(`Error reading coverage: ${String(err)}`)
     return null
   }
 }
@@ -72,7 +73,7 @@ export function getCoverageComment({
   core.info(
     `Comparing new coverage from ${currentCoverageFile} to previous ${previousCoverageFile}...`
   )
-  core.info(`Previous commit: ${previousCommitId}`)
+  core.info(`Previous commit from base branch: ${previousCommitId}`)
 
   const prevCov = previousCoverageFile
     ? readCoverage(previousCoverageFile)
@@ -88,16 +89,18 @@ export function getCoverageComment({
   const trends =
     prevCov !== null ? compareCoverageData(prevCov, currentCov) : null
 
+  const repoBaseUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}`
+
   const message = [
     `### Coverage trend:`,
     `_Commit ${commitId}${
       previousCommitId
-        ? `( [compared](https://github.com/alvaromartmart/code-coverage-tracker/compare/${previousCommitId}..${commitId}) to ${previousCommitId} )`
+        ? `( [compared](${repoBaseUrl}/compare/${previousCommitId}..${commitId}) to ${previousCommitId} )`
         : ''
     }_`,
     ...(trends
       ? [
-          `| - | Previous | Current | Trend |`,
+          `| - | Base | Current | Trend |`,
           `| --- | --- | --- | --- |`,
           `| Statements | ${prevCov?.Statements}% | ${
             currentCov.Statements
@@ -119,7 +122,7 @@ export function getCoverageComment({
           } ${trends.Lines}% |\n`
         ]
       : [
-          `| - | Previous | Current | Trend |`,
+          `| - | Base | Current | Trend |`,
           `| --- | --- | --- | --- |`,
           `| Statements | ? | ${currentCov.Statements}% | ? |`,
           `| Branches | ? | ${currentCov.Branches}% | ? |`,
@@ -131,7 +134,12 @@ export function getCoverageComment({
   core.setOutput('compared', trends !== null)
   core.setOutput(
     'has-changed',
-    trends?.Branches || trends?.Functions || trends?.Lines || trends?.Statements
+    trends
+      ? trends.Branches !== 0 ||
+          trends.Functions !== 0 ||
+          trends.Lines !== 0 ||
+          trends.Statements !== 0
+      : false
   )
 
   core.debug(message)

@@ -11,6 +11,9 @@ inputs:
   reference-coverage-path:
     description: 'Path to previous text-summary.txt coverage file to compare with'
     default: '__prev-text-summary.txt'
+  mode:
+    description: '"check" only probes the cache and outputs cache-hit; "compare" runs the full comparison (default)'
+    default: 'compare'
 
 outputs:
   comment:
@@ -21,6 +24,8 @@ outputs:
     description: 'Returns true if the action was able to compare coverage with the base branch'
   has-changed:
     description: 'Returns true if a comparison with base branch was performed and there are changes in coverage'
+  cache-hit:
+    description: 'true if previous coverage was found in cache, false otherwise'
 runs:
   using: 'node16'
   main: 'dist/index.js'
